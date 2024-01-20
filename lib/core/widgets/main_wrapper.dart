@@ -46,7 +46,9 @@ class MainWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> PageViewWidget = [
       const HomeScreen(),
-      const BookMarkScreen(),
+      BookMarkScreen(
+        pageController: pageController,
+      ),
     ];
     var height = MediaQuery.of(context).size.height;
     return Scaffold(

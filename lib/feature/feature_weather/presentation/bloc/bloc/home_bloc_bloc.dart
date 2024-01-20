@@ -9,12 +9,15 @@ import 'package:weather_clean/feature/feature_weather/presentation/bloc/bloc/fw_
 
 part 'home_bloc_event.dart';
 part 'home_bloc_state.dart';
+
 class HomeBloc extends Bloc<HomeBlocEvent, HomeState> {
   final GetCurrentWeatherUseCas getCurrentWeatherUseCase;
-  final GetForecastWeatherUseCase _getForecastWeatherUseCase;
+  final GetForecastWeatherUseCase getForecastWeatherUseCase;
 
-  HomeBloc(this.getCurrentWeatherUseCase, this._getForecastWeatherUseCase)
-      : super(HomeState(cwStatuse: CwLoading(), fwStatus: FwLoading())) {
+  HomeBloc(
+    this.getCurrentWeatherUseCase,
+    this.getForecastWeatherUseCase,
+  ) : super(HomeState(cwStatuse: CwLoading(), fwStatus: FwLoading())) {
     on<LoadCwEvent>((event, emit) async {
       emit(state.copyWith(newWStatuse: CwLoading()));
 
@@ -29,14 +32,13 @@ class HomeBloc extends Bloc<HomeBlocEvent, HomeState> {
       }
     });
 
-
     /// load 7 days Forecast weather for city Event
     on<LoadFwEvent>((event, emit) async {
       /// emit State to Loading for just Fw
       emit(state.copyWith(newFStatuse: FwLoading()));
 
       DataState dataState =
-          await _getForecastWeatherUseCase(event.forecastParams);
+          await getForecastWeatherUseCase(event.forecastParams);
 
       /// emit State to Completed for just Fw
       if (dataState is DataSuccess) {
